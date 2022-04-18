@@ -1,0 +1,59 @@
+#include <Servo.h>
+#define IN1 8
+#define IN2 9
+#define IN3 10
+#define IN4 11
+Servo servo;
+int Y = A1;
+int X = A0;
+
+int paso [4][4]=
+{
+  {1, 0, 0, 0},
+  {0, 1, 0, 0},
+  {0, 0, 1, 0},
+  {0, 0, 0, 1},
+};
+
+void setup() {
+  servo.attach(6);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop() {
+  int position_Y = analogRead(Y);
+  int angleY = map(position_Y, 0, 1023, 0, 180);
+  int position_X = analogRead(X);
+  int angleX = map(position_X, 0, 1023, 0, 180);
+
+  if(position_X > 90){
+    for (int i = 0; i < 4; i++){
+      digitalWrite(IN1, paso[i][0]);
+      digitalWrite(IN2, paso[i][1]);
+      digitalWrite(IN3, paso[i][2]);
+      digitalWrite(IN4, paso[i][3]);
+      delay(10);
+    }
+  }
+  if(position_X < 85){
+    for (int i = 0; i < 4; i++){
+    digitalWrite(IN1, paso[i][3]);
+    digitalWrite(IN2, paso[i][2]);
+    digitalWrite(IN3, paso[i][1]);
+    digitalWrite(IN4, paso[i][0]);
+    delay(10);
+  }
+  }
+  if((position_X > 85)&&(position_X < 90)){
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+  }
+
+  servo.write(angleY);
+  delay(10);
+}
